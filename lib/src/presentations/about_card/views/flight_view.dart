@@ -1,13 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:masters_flying/src/core/core.dart';
-import 'package:masters_flying/src/presentations/about_card/views/details/flightInfo.dart';
-import 'package:masters_flying/src/presentations/about_card/views/details/flight_header.dart';
-import 'package:masters_flying/src/presentations/about_card/views/details/passengers_and_pric.dart';
-
+import 'package:masters_flying/src/presentations/about_card/about_card.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class FlightView extends StatefulWidget {
@@ -18,8 +13,7 @@ class FlightView extends StatefulWidget {
 }
 
 class _FlightViewState extends State<FlightView> {
-  File? _selectedImage; // Хранит выбранное изображение
-  // Функция выбора изображения
+  File? _selectedImage;
   Future<void> _pickImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
