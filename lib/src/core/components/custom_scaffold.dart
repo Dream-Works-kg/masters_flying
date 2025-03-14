@@ -28,14 +28,14 @@ class CustomScaffold extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             color: backgroundColor ?? Color(0xff2D324C),
-            image: DecorationImage(
-              image: AssetImage(
-                backgroundImages ?? "assets/images/backround_images.png",
-              ),
-              fit: BoxFit.cover,
-            ),
+            // image: DecorationImage(
+            //   image: AssetImage(
+            //     backgroundImages ?? "assets/images/backround_images.png",
+            //   ),
+            //   fit: BoxFit.cover,
+            // ),
           ),
-          child: SafeArea(child: body),
+          child: body,
         ),
       ),
     );
