@@ -1,6 +1,5 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:masters_flying/src/core/navigator/app_router.dart';
 import 'package:masters_flying/src/presentations/game/core/flappy_bird_game.dart';
 import 'package:masters_flying/src/presentations/game/screens/game_over_screen.dart';
 import 'package:masters_flying/src/presentations/home/views/home_view.dart';
@@ -11,7 +10,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appRouter = AppRouter.router;
     final game = FlappyBirdGame();
 
     return ResponsiveSizer(
