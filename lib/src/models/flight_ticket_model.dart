@@ -33,9 +33,20 @@ class FlightTicketProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isFavorite = false;
   void toggleFavorite(int id) {
     final ticket = _tickets.firstWhere((ticket) => ticket.id == id);
     ticket.isFavorite = !ticket.isFavorite;
+    notifyListeners();
+  }
+
+  void toggleFavoriteM(int id) {
+    if (_currentTicket.id == 0) {
+      _currentTicket.isFavorite = !_currentTicket.isFavorite;
+    } else {
+      final ticket = _tickets.firstWhere((ticket) => ticket.id == id);
+      ticket.isFavorite = !ticket.isFavorite;
+    }
     notifyListeners();
   }
 
@@ -99,7 +110,9 @@ class FlightTicketProvider with ChangeNotifier {
 
   void saveTicket() {
     _currentTicket.id = ++_currentId;
+    _currentTicket.isFavorite = _isFavorite;
     _tickets.add(_currentTicket);
+
     _currentTicket = FlightTicket(
       id: 0,
       from: '',
@@ -109,7 +122,8 @@ class FlightTicketProvider with ChangeNotifier {
       passengers: 1,
       price: 0,
     );
+
+    _isFavorite = false;
     notifyListeners();
-    log("Flight saved: ${_tickets.last.from} -> ${_tickets.last.to}, ${_tickets.last.passengers} passengers, \$${_tickets.last.price}");
   }
 }

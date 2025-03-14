@@ -136,31 +136,7 @@ class _AllTextFieldWidgetsState extends State<AllTextFieldWidgets> {
               ],
             ),
           ),
-          SizedBox(height: 2.h),
-          GestureDetector(
-            onTap: () {
-              provider.saveTicket();
-              Navigator.pop(context);
-            },
-            child: Container(
-              height: 8.5.h,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Color(0xff070730),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Center(
-                child: Text(
-                  "Save",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
-          ),
+         
         ],
       ),
     );

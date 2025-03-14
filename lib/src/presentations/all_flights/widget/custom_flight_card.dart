@@ -51,6 +51,7 @@ class _CustomFlightCardState extends State<CustomFlightCard> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<FlightTicketProvider>(context);
     return Container(
       height: 25.h,
       width: double.infinity,
@@ -88,7 +89,7 @@ class _CustomFlightCardState extends State<CustomFlightCard> {
                                     (ticket) => ticket.id == widget.tiketId)
                                 .isFavorite
                             ? 'assets/svg/Vector.svg'
-                            : 'assets/svg/Vector (2).svg',
+                            : 'assets/svg/Vector (2).svg', // Не избранное
                         height: 3.5.h,
                         width: 3.5.w,
                       ),

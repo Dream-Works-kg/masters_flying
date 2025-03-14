@@ -22,7 +22,6 @@ class _FavoriteViewState extends State<FavoriteView> {
   Widget build(BuildContext context) {
     final provider = Provider.of<FlightTicketProvider>(context);
 
-    // Получаем только избранные билеты
     final favoriteTickets =
         provider.tickets.where((ticket) => ticket.isFavorite).toList();
 

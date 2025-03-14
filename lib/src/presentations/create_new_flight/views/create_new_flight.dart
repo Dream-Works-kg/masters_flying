@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:masters_flying/src/core/core.dart';
+import 'package:masters_flying/src/models/flight_ticket_model.dart';
 import 'package:masters_flying/src/presentations/create_new_flight/widget/all_text_field_widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class CreateNewFlightView extends StatelessWidget {
-  const CreateNewFlightView({super.key});
+  const CreateNewFlightView({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<FlightTicketProvider>(context);
     return CustomScaffold(
       body: Stack(
         children: [
@@ -39,9 +45,23 @@ class CreateNewFlightView extends StatelessWidget {
                             color: Colors.white,
                           ),
                         ),
-                        Image.asset(
-                          'assets/images/star.png',
-                          height: 3.5.h,
+                        GestureDetector(
+                          onTap: () {
+                            provider.toggleFavoriteM(provider.currentTicket.id);
+                          },
+                          child: Consumer<FlightTicketProvider>(
+                            builder: (context, provider, child) {
+                              final isFavorite =
+                                  provider.currentTicket.isFavorite;
+                              return SvgPicture.asset(
+                                isFavorite
+                                    ? 'assets/svg/Vector.svg'
+                                    : 'assets/svg/Vector (2).svg',
+                                height: 3.5.h,
+                                width: 3.5.w,
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),
@@ -73,6 +93,31 @@ class CreateNewFlightView extends StatelessWidget {
                 child: Column(
                   children: [
                     AllTextFieldWidgets(),
+                    SizedBox(height: 2.h),
+                    GestureDetector(
+                      onTap: () {
+                        provider.saveTicket();
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        height: 8.5.h,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Color(0xff070730),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Save",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
