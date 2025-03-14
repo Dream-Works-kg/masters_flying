@@ -11,7 +11,6 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final game = FlappyBirdGame();
-
     return ResponsiveSizer(
       builder: (p0, p1, p2) => GameWidget(
         game: game,

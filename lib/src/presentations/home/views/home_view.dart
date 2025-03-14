@@ -108,7 +108,7 @@ class HomeView extends StatelessWidget {
             top: 26.h,
             left: 39.w,
             child: Image.asset(
-              'assets/images/plane.png',
+              'assets/images/plane_home_view.png',
               width: 25.w,
             ),
           ),
