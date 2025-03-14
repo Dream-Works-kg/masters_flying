@@ -22,8 +22,10 @@ class CustomScaffold extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: appBar,
+
         backgroundColor: backgroundColor ?? Color(0xff070730),
         body: body,
+
       ),
     );
   }
