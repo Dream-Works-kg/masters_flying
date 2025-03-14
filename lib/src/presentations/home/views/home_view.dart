@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:masters_flying/src/core/core.dart';
 import 'package:masters_flying/src/presentations/game/core/flappy_bird_game.dart';
+import 'package:masters_flying/src/presentations/presentations.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class HomeView extends StatelessWidget {
@@ -28,9 +29,19 @@ class HomeView extends StatelessWidget {
           Positioned(
             right: 20.sp,
             top: 5.h,
-            child: SvgPicture.asset(
-              'assets/svg/star_icon.svg',
-              width: 22.sp,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FavoriteView(),
+                  ),
+                );
+              },
+              child: SvgPicture.asset(
+                'assets/svg/star_icon.svg',
+                width: 22.sp,
+              ),
             ),
           ),
           Positioned(
@@ -89,7 +100,14 @@ class HomeView extends StatelessWidget {
                   _buildButton(
                     'Start',
                     const Color(0xFF070730),
-                    () {},
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AllFlightsView(),
+                        ),
+                      );
+                    },
                   ),
                   SizedBox(height: 2.h),
                   _buildButton(

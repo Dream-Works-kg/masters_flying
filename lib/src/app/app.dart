@@ -12,13 +12,16 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final game = FlappyBirdGame();
     return ResponsiveSizer(
-      builder: (p0, p1, p2) => GameWidget(
-        game: game,
-        initialActiveOverlays: const [HomeView.id],
-        overlayBuilderMap: {
-          'mainMenu': (context, _) => HomeView(game: game),
-          'gameOver': (context, _) => GameOverScreen(game: game),
-        },
+      builder: (p0, p1, p2) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: GameWidget(
+          game: game,
+          initialActiveOverlays: const [HomeView.id],
+          overlayBuilderMap: {
+            'mainMenu': (context, _) => HomeView(game: game),
+            'gameOver': (context, _) => GameOverScreen(game: game),
+          },
+        ),
       ),
     );
   }

@@ -1,11 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:masters_flying/src/core/core.dart';
 import 'package:masters_flying/src/presentations/create_new_flight/widget/all_text_field_widgets.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class NewFlightView extends StatelessWidget {
-  const NewFlightView({super.key});
+class CreateNewFlightView extends StatelessWidget {
+  const CreateNewFlightView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,7 @@ class NewFlightView extends StatelessWidget {
                           size: 20.sp,
                         ),
                         Text(
-                          "Flight Details",
+                          "New Flight",
                           style: TextStyle(
                             fontSize: 19.sp,
                             fontWeight: FontWeight.bold,

@@ -54,10 +54,9 @@ class _CustomFlightCardState extends State<CustomFlightCard> {
 
   void _toggleLeftIcon() {
     setState(() {
-      currentLeftIcon =
-          (currentLeftIcon == widget.leftIconPath)
-              ? widget.alternateLeftIconPath
-              : widget.leftIconPath;
+      currentLeftIcon = (currentLeftIcon == widget.leftIconPath)
+          ? widget.alternateLeftIconPath
+          : widget.leftIconPath;
     });
   }
 
@@ -79,7 +78,6 @@ class _CustomFlightCardState extends State<CustomFlightCard> {
         ],
       ),
       child: Stack(
-        clipBehavior: Clip.none,
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 13.sp, vertical: 13.sp),

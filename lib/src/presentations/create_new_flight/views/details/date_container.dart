@@ -85,13 +85,7 @@ class _DateContainerState extends State<DateContainer> {
             decoration: BoxDecoration(
               color: const Color(0x33B7B7B7),
               borderRadius: BorderRadius.circular(50),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0x33B7B7B7),
-                  offset: Offset(2, 2),
-                  blurRadius: 4,
-                ),
-              ],
+              boxShadow: [],
             ),
             child: Row(
               children: [

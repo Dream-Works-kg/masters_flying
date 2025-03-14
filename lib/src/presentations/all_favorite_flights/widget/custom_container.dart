@@ -28,7 +28,6 @@ class CustomContainerFly extends StatefulWidget {
     required this.arrivalCity,
     required this.leftIconPath,
     required this.alternateLeftIconPath,
-
     required this.departureTime,
     required this.arrivalTime,
     required this.duration,
@@ -54,10 +53,9 @@ class _CustomFlightCardState extends State<CustomContainerFly> {
 
   void _toggleLeftIcon() {
     setState(() {
-      currentLeftIcon =
-          (currentLeftIcon == widget.leftIconPath)
-              ? widget.alternateLeftIconPath
-              : widget.leftIconPath;
+      currentLeftIcon = (currentLeftIcon == widget.leftIconPath)
+          ? widget.alternateLeftIconPath
+          : widget.leftIconPath;
     });
   }
 
