@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+
 import 'package:masters_flying/src/presentations/about_card/views/flight_view.dart';
 import 'package:masters_flying/src/presentations/create_new_flight/views/new%20_flight_view.dart';
 import 'package:masters_flying/src/presentations/home/views/home_view.dart';
@@ -9,6 +10,7 @@ class AppRouter {
     routes: [
       // GoRoute(
       //   path: '/',
+
       //   builder: (context, state) => HomeView(),
       // ),
       // GoRoute(
@@ -19,6 +21,7 @@ class AppRouter {
         path: '/flight_view',
         builder: (context, state) => FlightView(),
       ),
+
     ],
   );
 }

@@ -22,21 +22,10 @@ class CustomScaffold extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: appBar,
-        backgroundColor: backgroundColor ?? Color(0xff2D324C),
-        body: Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: backgroundColor ?? Color(0xff2D324C),
-            // image: DecorationImage(
-            //   image: AssetImage(
-            //     backgroundImages ?? "assets/images/backround_images.png",
-            //   ),
-            //   fit: BoxFit.cover,
-            // ),
-          ),
-          child: body,
-        ),
+
+        backgroundColor: backgroundColor ?? Color(0xff070730),
+        body: body,
+
       ),
     );
   }
