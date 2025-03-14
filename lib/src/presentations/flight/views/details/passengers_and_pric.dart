@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:masters_flying/src/models/flight_ticket_model.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class PassengersAndPrice extends StatelessWidget {
-  const PassengersAndPrice({super.key});
+  final FlightTicket ticket;
+
+  const PassengersAndPrice({super.key, required this.ticket});
 
   @override
   Widget build(BuildContext context) {
@@ -47,49 +50,34 @@ class PassengersAndPrice extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: 28.8.w,
-                  height: 8.h,
-                  decoration: ShapeDecoration(
-                    color: Color(0x33B7B7B7),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(126.17),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "2",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 28.8.w,
-                  height: 8.h,
-                  decoration: ShapeDecoration(
-                    color: Color(0x33B7B7B7),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(126.17),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "20\$",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                )
+                _buildBox("${ticket.passengers}"),
+                _buildBox("\$${ticket.price}"),
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBox(String text) {
+    return Container(
+      width: 28.8.w,
+      height: 8.h,
+      decoration: ShapeDecoration(
+        color: Color(0x33B7B7B7),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(126.17),
+        ),
+      ),
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
       ),
     );

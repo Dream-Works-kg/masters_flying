@@ -5,12 +5,14 @@ class CustomContainer extends StatelessWidget {
   final String label;
   final String hintText;
   final String imagePath;
+final  Function(String)? onChanged;
+  final TextEditingController controller;
 
   const CustomContainer({
     super.key,
     required this.label,
     required this.hintText,
-    required this.imagePath,
+    required this.imagePath, required this.controller, this.onChanged,
   });
 
   @override
@@ -40,6 +42,8 @@ class CustomContainer extends StatelessWidget {
             boxShadow: [],
           ),
           child: TextField(
+            onChanged: onChanged,
+            controller: controller,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 0.sp,

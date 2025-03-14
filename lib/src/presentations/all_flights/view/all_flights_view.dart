@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:masters_flying/src/models/flight_ticket_model.dart';
 import 'package:masters_flying/src/presentations/create_new_flight/views/create_new_flight.dart';
 import 'package:masters_flying/src/presentations/presentations.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class AllFlightsView extends StatelessWidget {
+class AllFlightsView extends StatefulWidget {
   const AllFlightsView({super.key});
 
   @override
+  State<AllFlightsView> createState() => _AllFlightsViewState();
+}
+
+class _AllFlightsViewState extends State<AllFlightsView> {
+  bool isEdit = false;
+  @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<FlightTicketProvider>(context);
+
     return Scaffold(
       backgroundColor: const Color(0xff070730),
       body: SingleChildScrollView(
@@ -37,10 +48,17 @@ class AllFlightsView extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SvgPicture.asset(
-                    'assets/svg/pencil.svg',
-                    height: 4.h,
-                    width: 4.w,
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isEdit = !isEdit;
+                      });
+                    },
+                    child: SvgPicture.asset(
+                      'assets/svg/pencil.svg',
+                      height: 4.h,
+                      width: 4.w,
+                    ),
                   ),
                 ],
               ),
@@ -62,10 +80,16 @@ class AllFlightsView extends StatelessWidget {
                   Positioned.fill(
                     top: 0,
                     child: ListView.builder(
-                      itemCount: 2,
+                      itemCount: provider.tickets.length,
                       padding:
                           EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
                       itemBuilder: (context, index) {
+                        final ticket = provider.tickets[index];
+                        Duration flightDuration =
+                            ticket.arrivalTime.difference(ticket.departureTime);
+
+                        String durationText =
+                            "${flightDuration.inHours}h ${flightDuration.inMinutes.remainder(60)}m";
                         return Column(
                           children: [
                             GestureDetector(
@@ -73,22 +97,29 @@ class AllFlightsView extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => FlightView(),
+                                      builder: (context) => FlightView(
+                                        ticket: ticket,
+                                      ),
                                     ));
                               },
                               child: CustomFlightCard(
-                                departureCode: 'GUJ',
-                                departureCity: 'Gujarat',
-                                arrivalCode: 'MUM',
-                                arrivalCity: 'Mumbai',
-                                leftIconPath: 'assets/svg/Vector (2).svg',
-                                rightIconPath: 'assets/svg/Vector (1).svg',
-                                departureTime: '09:30 AM',
-                                arrivalTime: '11:45 AM',
-                                duration: '1h 20m',
-                                departureDate: 'Mon 15 Jul',
-                                arrivalDate: 'Mon 15 Jul',
-                                price: '\$20',
+                                tiketId: ticket.id,
+                                isEdit: isEdit,
+                                departureCode:
+                                    provider.getCityCode(ticket.from),
+                                departureCity: ticket.from,
+                                arrivalCode: provider.getCityCode(ticket.to),
+                                arrivalCity: ticket.to,
+                                departureTime: DateFormat('hh:mm a')
+                                    .format(ticket.departureTime),
+                                arrivalTime: DateFormat('hh:mm a')
+                                    .format(ticket.arrivalTime),
+                                duration: durationText,
+                                departureDate: DateFormat('EEE d MMM ')
+                                    .format(ticket.departureTime),
+                                arrivalDate: DateFormat('EEE d MMM ')
+                                    .format(ticket.arrivalTime),
+                                price: '\$${ticket.price}',
                                 planeImagePath: 'assets/images/Group 123.png',
                                 alternateLeftIconPath: 'assets/svg/Vector.svg',
                               ),

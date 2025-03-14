@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:masters_flying/src/models/flight_ticket_model.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class FlightInfo extends StatelessWidget {
-  const FlightInfo({super.key});
+  final FlightTicket ticket;
+  const FlightInfo({super.key, required this.ticket});
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<FlightTicketProvider>(context);
+
+    Duration flightDuration =
+        ticket.arrivalTime.difference(ticket.departureTime);
+
+    String durationText =
+        "${flightDuration.inHours}h ${flightDuration.inMinutes.remainder(60)}m";
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.sp),
       child: Column(
@@ -14,7 +26,7 @@ class FlightInfo extends StatelessWidget {
         children: [
           Text(
             textAlign: TextAlign.start,
-            'Mon 15 Jul',
+            DateFormat('EEE d MMM ').format(ticket.departureTime),
             style: TextStyle(
               color: Colors.white,
               fontSize: 17.sp,
@@ -26,7 +38,7 @@ class FlightInfo extends StatelessWidget {
             children: [
               Text(
                 textAlign: TextAlign.start,
-                'GUJ',
+                provider.getCityCode(ticket.from),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 19.sp,
@@ -36,7 +48,7 @@ class FlightInfo extends StatelessWidget {
               Image.asset("assets/images/fly.png", height: 5.h),
               Text(
                 textAlign: TextAlign.start,
-                'MUM',
+                provider.getCityCode(ticket.to),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 19.sp,
@@ -50,7 +62,7 @@ class FlightInfo extends StatelessWidget {
             children: [
               Text(
                 textAlign: TextAlign.start,
-                'Gujarat',
+                ticket.from,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16.5.sp,
@@ -59,7 +71,7 @@ class FlightInfo extends StatelessWidget {
               ),
               Text(
                 textAlign: TextAlign.start,
-                '1h 20m',
+                durationText,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 14.5.sp,
@@ -68,7 +80,7 @@ class FlightInfo extends StatelessWidget {
               ),
               Text(
                 textAlign: TextAlign.start,
-                'Mumbai',
+                ticket.to,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16.5.sp,

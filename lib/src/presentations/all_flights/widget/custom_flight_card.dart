@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:masters_flying/src/models/flight_ticket_model.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class CustomFlightCard extends StatefulWidget {
+  final int tiketId;
   final String departureCode;
   final String departureCity;
   final String arrivalCode;
   final String arrivalCity;
-  final String leftIconPath;
   final String alternateLeftIconPath;
-  final String rightIconPath;
+
   final String departureTime;
   final String arrivalTime;
   final String duration;
@@ -19,6 +21,7 @@ class CustomFlightCard extends StatefulWidget {
   final String price;
   final String planeImagePath;
   final Color backgroundColor;
+  final bool isEdit;
 
   const CustomFlightCard({
     super.key,
@@ -26,9 +29,7 @@ class CustomFlightCard extends StatefulWidget {
     required this.departureCity,
     required this.arrivalCode,
     required this.arrivalCity,
-    required this.leftIconPath,
     required this.alternateLeftIconPath,
-    required this.rightIconPath,
     required this.departureTime,
     required this.arrivalTime,
     required this.duration,
@@ -37,6 +38,8 @@ class CustomFlightCard extends StatefulWidget {
     required this.price,
     required this.planeImagePath,
     this.backgroundColor = const Color(0xff324BA1),
+    required this.isEdit,
+    required this.tiketId,
   });
 
   @override
@@ -45,20 +48,6 @@ class CustomFlightCard extends StatefulWidget {
 
 class _CustomFlightCardState extends State<CustomFlightCard> {
   late String currentLeftIcon;
-
-  @override
-  void initState() {
-    super.initState();
-    currentLeftIcon = widget.leftIconPath;
-  }
-
-  void _toggleLeftIcon() {
-    setState(() {
-      currentLeftIcon = (currentLeftIcon == widget.leftIconPath)
-          ? widget.alternateLeftIconPath
-          : widget.leftIconPath;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,18 +76,37 @@ class _CustomFlightCardState extends State<CustomFlightCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                      onTap: _toggleLeftIcon,
+                      onTap: () {
+                        Provider.of<FlightTicketProvider>(context,
+                                listen: false)
+                            .toggleFavorite(widget.tiketId);
+                      },
                       child: SvgPicture.asset(
-                        currentLeftIcon,
+                        Provider.of<FlightTicketProvider>(context)
+                                .tickets
+                                .firstWhere(
+                                    (ticket) => ticket.id == widget.tiketId)
+                                .isFavorite
+                            ? 'assets/svg/Vector.svg'
+                            : 'assets/svg/Vector (2).svg',
                         height: 3.5.h,
                         width: 3.5.w,
                       ),
                     ),
-                    SvgPicture.asset(
-                      widget.rightIconPath,
-                      height: 3.5.h,
-                      width: 3.5.w,
-                    ),
+                    widget.isEdit
+                        ? GestureDetector(
+                            onTap: () {
+                              Provider.of<FlightTicketProvider>(context,
+                                      listen: false)
+                                  .removeTicket(widget.tiketId);
+                            },
+                            child: SvgPicture.asset(
+                              'assets/svg/Vector (1).svg',
+                              height: 3.5.h,
+                              width: 3.5.w,
+                            ),
+                          )
+                        : SizedBox()
                   ],
                 ),
                 SizedBox(height: 1.h),
@@ -138,9 +146,9 @@ class _CustomFlightCardState extends State<CustomFlightCard> {
                         ],
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(widget.departureDate, style: _textStyle(14)),
-                          const Spacer(),
                           Text(widget.arrivalDate, style: _textStyle(14)),
                         ],
                       ),

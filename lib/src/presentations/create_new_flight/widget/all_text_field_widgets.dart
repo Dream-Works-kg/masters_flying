@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:masters_flying/src/models/flight_ticket_model.dart';
 import 'package:masters_flying/src/presentations/create_new_flight/views/details/custom_container.dart';
 import 'package:masters_flying/src/presentations/create_new_flight/views/details/date_container.dart';
 import 'package:masters_flying/src/presentations/create_new_flight/views/details/price_container.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class AllTextFieldWidgets extends StatefulWidget {
@@ -14,21 +16,16 @@ class AllTextFieldWidgets extends StatefulWidget {
 }
 
 class _AllTextFieldWidgetsState extends State<AllTextFieldWidgets> {
-  File? _selectedImage; // Хранит выбранное изображение
+  final controllerFrom = TextEditingController();
+  final controllerTo = TextEditingController();
 
-  // Функция выбора изображения
-  Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-      });
-    }
-  }
+  final controllerPassengers = TextEditingController();
+  final controllerPrice = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<FlightTicketProvider>(context);
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.sp),
       child: Column(
@@ -36,12 +33,16 @@ class _AllTextFieldWidgetsState extends State<AllTextFieldWidgets> {
         children: [
           SizedBox(height: 1.5.h),
           CustomContainer(
+            controller: controllerFrom,
+            onChanged: provider.updateFrom,
             label: 'From',
             hintText: 'Enter Flight Number',
             imagePath: 'assets/images/plane.png',
           ),
           SizedBox(height: 1.2.h),
           CustomContainer(
+            controller: controllerTo,
+            onChanged: provider.updateTo,
             label: 'To',
             hintText: 'Enter Flight Number',
             imagePath: 'assets/images/plane1.png',
@@ -54,13 +55,13 @@ class _AllTextFieldWidgetsState extends State<AllTextFieldWidgets> {
                 DateContainer(
                   label: 'Depart',
                   dateText: '',
-                  imagePath: 'assets/images/Calender.png',
+                  onDateSelected: provider.updateDepartureTime,
                 ),
                 SizedBox(width: 13.sp),
                 DateContainer(
                   label: 'Arrive',
                   dateText: '',
-                  imagePath: 'assets/images/Calender.png',
+                  onDateSelected: provider.updateArrivalTime,
                 ),
               ],
             ),
@@ -69,11 +70,19 @@ class _AllTextFieldWidgetsState extends State<AllTextFieldWidgets> {
           Row(
             children: [
               PriceContainer(
+                controller: controllerPassengers,
+                hintext: 'passengers',
                 label: 'Passengers',
+                onChanged: (value) =>
+                    provider.updatePassengers(int.tryParse(value) ?? 1),
               ),
               SizedBox(width: 14.sp),
               PriceContainer(
+                controller: controllerPrice,
+                hintext: 'price',
                 label: 'Price',
+                onChanged: (value) =>
+                    provider.updatePrice(int.tryParse(value) ?? 0),
               ),
             ],
           ),
@@ -92,7 +101,13 @@ class _AllTextFieldWidgetsState extends State<AllTextFieldWidgets> {
           ),
           SizedBox(height: 1.h),
           GestureDetector(
-            onTap: _pickImage, // Открываем галерею при нажатии
+            onTap: () async {
+              final pickedFile =
+                  await ImagePicker().pickImage(source: ImageSource.gallery);
+              if (pickedFile != null) {
+                provider.updateTicketPhoto(File(pickedFile.path));
+              }
+            },
             child: Stack(
               children: [
                 Container(
@@ -102,11 +117,11 @@ class _AllTextFieldWidgetsState extends State<AllTextFieldWidgets> {
                     color: const Color(0x33B7B7B7),
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  child: _selectedImage != null
+                  child: provider.currentTicket.ticketPhoto != null
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(30),
                           child: Image.file(
-                            _selectedImage!,
+                            provider.currentTicket.ticketPhoto!,
                             width: double.infinity,
                             height: 18.h,
                             fit: BoxFit.cover,
@@ -122,20 +137,26 @@ class _AllTextFieldWidgetsState extends State<AllTextFieldWidgets> {
             ),
           ),
           SizedBox(height: 2.h),
-          Container(
-            height: 8.5.h,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Color(0xff070730),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Center(
-              child: Text(
-                "Save",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w700,
+          GestureDetector(
+            onTap: () {
+              provider.saveTicket();
+              Navigator.pop(context);
+            },
+            child: Container(
+              height: 8.5.h,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Color(0xff070730),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Center(
+                child: Text(
+                  "Save",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ),

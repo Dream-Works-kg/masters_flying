@@ -15,11 +15,6 @@ class AppRouter {
       //   path: '/new_flight',
       //   builder: (context, state) => NewFlightView(),
       // ),
-       GoRoute(
-        path: '/flight_view',
-        builder: (context, state) => FlightView(),
-      ),
-
     ],
   );
 }

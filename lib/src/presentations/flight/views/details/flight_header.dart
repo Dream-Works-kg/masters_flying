@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:masters_flying/src/models/flight_ticket_model.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class FlightHeader extends StatelessWidget {
-  const FlightHeader({super.key});
+  const FlightHeader({
+    super.key,
+    required this.ticket,
+  });
+  final FlightTicket ticket;
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +44,21 @@ class FlightHeader extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  Image.asset(
-                    'assets/images/star.png',
-                    height: 3.5.h,
+                  GestureDetector(
+                    onTap: () {
+                      Provider.of<FlightTicketProvider>(context, listen: false)
+                          .toggleFavorite(ticket.id);
+                    },
+                    child: SvgPicture.asset(
+                      Provider.of<FlightTicketProvider>(context)
+                              .tickets
+                              .firstWhere((ticket) => ticket.id == ticket.id)
+                              .isFavorite
+                          ? 'assets/svg/Vector.svg'
+                          : 'assets/svg/Vector (2).svg',
+                      height: 3.5.h,
+                      width: 3.5.w,
+                    ),
                   ),
                 ],
               ),
