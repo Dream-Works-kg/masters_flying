@@ -79,58 +79,69 @@ class _AllFlightsViewState extends State<AllFlightsView> {
                 children: [
                   Positioned.fill(
                     top: 0,
-                    child: ListView.builder(
-                      itemCount: provider.tickets.length,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
-                      itemBuilder: (context, index) {
-                        final ticket = provider.tickets[index];
-                        Duration flightDuration =
-                            ticket.arrivalTime.difference(ticket.departureTime);
+                    child: provider.tickets.isEmpty
+                        ? Center(
+                            child: Text(
+                              "No flights yet",
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 18.sp),
+                            ),
+                          )
+                        : ListView.builder(
+                            itemCount: provider.tickets.length,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 2.w, vertical: 2.h),
+                            itemBuilder: (context, index) {
+                              final ticket = provider.tickets[index];
+                              Duration flightDuration = ticket.arrivalTime
+                                  .difference(ticket.departureTime);
 
-                        String durationText =
-                            "${flightDuration.inHours}h ${flightDuration.inMinutes.remainder(60)}m";
-                        return Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => FlightView(
-                                        ticket: ticket,
-                                      ),
-                                    ));
-                              },
-                              child: CustomFlightCard(
-                                tiketId: ticket.id,
-                                isEdit: isEdit,
-                                departureCode:
-                                    provider.getCityCode(ticket.from),
-                                departureCity: ticket.from,
-                                arrivalCode: provider.getCityCode(ticket.to),
-                                arrivalCity: ticket.to,
-                                departureTime: DateFormat('hh:mm a')
-                                    .format(ticket.departureTime),
-                                arrivalTime: DateFormat('hh:mm a')
-                                    .format(ticket.arrivalTime),
-                                duration: durationText,
-                                departureDate: DateFormat('EEE d MMM ')
-                                    .format(ticket.departureTime),
-                                arrivalDate: DateFormat('EEE d MMM ')
-                                    .format(ticket.arrivalTime),
-                                price: '\$${ticket.price}',
-                                planeImagePath: 'assets/images/Group 123.png',
-                                alternateLeftIconPath: 'assets/svg/Vector.svg',
-                              ),
-                            ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                          ],
-                        );
-                      },
-                    ),
+                              String durationText =
+                                  "${flightDuration.inHours}h ${flightDuration.inMinutes.remainder(60)}m";
+                              return Column(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => FlightView(
+                                              ticket: ticket,
+                                            ),
+                                          ));
+                                    },
+                                    child: CustomFlightCard(
+                                      tiketId: ticket.id,
+                                      isEdit: isEdit,
+                                      departureCode:
+                                          provider.getCityCode(ticket.from),
+                                      departureCity: ticket.from,
+                                      arrivalCode:
+                                          provider.getCityCode(ticket.to),
+                                      arrivalCity: ticket.to,
+                                      departureTime: DateFormat('hh:mm a')
+                                          .format(ticket.departureTime),
+                                      arrivalTime: DateFormat('hh:mm a')
+                                          .format(ticket.arrivalTime),
+                                      duration: durationText,
+                                      departureDate: DateFormat('EEE d MMM ')
+                                          .format(ticket.departureTime),
+                                      arrivalDate: DateFormat('EEE d MMM ')
+                                          .format(ticket.arrivalTime),
+                                      price: '\$${ticket.price}',
+                                      planeImagePath:
+                                          'assets/images/Group 123.png',
+                                      alternateLeftIconPath:
+                                          'assets/svg/Vector.svg',
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 2.h,
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
                   ),
                   Positioned(
                     bottom: 3.h,
