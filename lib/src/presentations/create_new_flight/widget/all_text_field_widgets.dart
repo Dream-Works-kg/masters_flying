@@ -105,7 +105,9 @@ class _AllTextFieldWidgetsState extends State<AllTextFieldWidgets> {
               final pickedFile =
                   await ImagePicker().pickImage(source: ImageSource.gallery);
               if (pickedFile != null) {
-                provider.updateTicketPhoto(File(pickedFile.path));
+                final File permanentImage = await provider
+                    .saveImageToPermanentStorage(File(pickedFile.path));
+                provider.updateTicketPhoto(permanentImage);
               }
             },
             child: Stack(

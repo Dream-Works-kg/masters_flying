@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart';
 
 class FlightTicket {
   bool isFavorite;
@@ -38,26 +39,32 @@ class FlightTicket {
         'ticketPhoto': ticketPhoto?.path,
       };
 
-  factory FlightTicket.fromJson(Map<String, dynamic> json) => FlightTicket(
-        id: json['id'],
-        isFavorite: json['isFavorite'],
-        from: json['from'],
-        to: json['to'],
-        departureTime: DateTime.parse(json['departureTime']),
-        arrivalTime: DateTime.parse(json['arrivalTime']),
-        passengers: json['passengers'],
-        price: json['price'],
-        ticketPhoto:
-            json['ticketPhoto'] != null ? File(json['ticketPhoto']) : null,
-      );
+  factory FlightTicket.fromJson(Map<String, dynamic> json) {
+    File? photoFile;
+    if (json['ticketPhoto'] != null) {
+      File tempFile = File(json['ticketPhoto']);
+      if (tempFile.existsSync()) {
+        photoFile = tempFile;
+      }
+    }
+
+    return FlightTicket(
+      id: json['id'],
+      isFavorite: json['isFavorite'],
+      from: json['from'],
+      to: json['to'],
+      departureTime: DateTime.parse(json['departureTime']),
+      arrivalTime: DateTime.parse(json['arrivalTime']),
+      passengers: json['passengers'],
+      price: json['price'],
+      ticketPhoto: photoFile,
+    );
+  }
 }
 
 class FlightTicketProvider with ChangeNotifier {
   final List<FlightTicket> _tickets = [];
   int _currentId = 0;
-  bool _isFavorite = false;
-  int _totalFlights = 0;
-
   FlightTicket _currentTicket = FlightTicket(
     id: 0,
     from: '',
@@ -68,7 +75,6 @@ class FlightTicketProvider with ChangeNotifier {
     price: 0,
   );
 
-  int get totalFlights => _totalFlights;
   FlightTicket get currentTicket => _currentTicket;
   List<FlightTicket> get tickets => _tickets;
 
@@ -85,7 +91,6 @@ class FlightTicketProvider with ChangeNotifier {
       _tickets.addAll(jsonList.map((e) => FlightTicket.fromJson(e)));
       _currentId = _tickets.isNotEmpty ? _tickets.last.id : 0;
     }
-    _totalFlights = prefs.getInt('totalFlights') ?? 0;
     notifyListeners();
   }
 
@@ -94,24 +99,24 @@ class FlightTicketProvider with ChangeNotifier {
     List<Map<String, dynamic>> jsonList =
         _tickets.map((e) => e.toJson()).toList();
     await prefs.setString('tickets', jsonEncode(jsonList));
-    await prefs.setInt('totalFlights', _totalFlights);
   }
 
-  void addFlight() {
-    _totalFlights++;
-    _saveTickets();
-    notifyListeners();
-  }
-
-  void resetFlights() {
-    _totalFlights = 0;
-    _saveTickets();
+  void updateTicketPhoto(File? image) async {
+    if (image != null && image.existsSync()) {
+      File savedImage = await saveImageToPermanentStorage(image);
+      _currentTicket.ticketPhoto = savedImage;
+      _saveTickets();
+    } else {
+      _currentTicket.ticketPhoto = null;
+    }
     notifyListeners();
   }
 
   void saveTicket() {
+    File? savedPhoto =
+        _currentTicket.ticketPhoto; // Сохраняем текущее фото перед сбросом
+
     _currentTicket.id = ++_currentId;
-    _currentTicket.isFavorite = _isFavorite;
     _tickets.add(_currentTicket);
     _saveTickets();
 
@@ -123,8 +128,34 @@ class FlightTicketProvider with ChangeNotifier {
       arrivalTime: DateTime.now(),
       passengers: 1,
       price: 0,
+      ticketPhoto: savedPhoto,
     );
-    _isFavorite = false;
+
+    notifyListeners();
+  }
+
+  final bool _isFavorite = false;
+  int _totalFlights = 0;
+
+  int get totalFlights => _totalFlights;
+
+  Future<File> saveImageToPermanentStorage(File image) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final newPath =
+        '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+    File newFile = await image.copy(newPath);
+    return newFile;
+  }
+
+  void addFlight() {
+    _totalFlights++;
+    _saveTickets();
+    notifyListeners();
+  }
+
+  void resetFlights() {
+    _totalFlights = 0;
+    _saveTickets();
     notifyListeners();
   }
 
@@ -179,11 +210,6 @@ class FlightTicketProvider with ChangeNotifier {
 
   void updatePrice(int value) {
     _currentTicket.price = value;
-    notifyListeners();
-  }
-
-  void updateTicketPhoto(File? image) {
-    _currentTicket.ticketPhoto = image;
     notifyListeners();
   }
 
