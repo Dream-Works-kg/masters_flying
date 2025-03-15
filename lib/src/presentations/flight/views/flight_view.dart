@@ -6,9 +6,11 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 class FlightView extends StatefulWidget {
   final FlightTicket ticket;
-  
 
-  const FlightView({super.key, required this.ticket, });
+  const FlightView({
+    super.key,
+    required this.ticket,
+  });
 
   @override
   State<FlightView> createState() => _FlightViewState();
@@ -20,12 +22,13 @@ class _FlightViewState extends State<FlightView> {
     return CustomScaffold(
       body: Stack(
         children: [
-          FlightHeader(ticket: widget.ticket,  ),
+          FlightHeader(
+            ticket: widget.ticket,
+          ),
           Positioned(
             top: 45.sp,
             left: 15.sp,
             right: 15.sp,
-            bottom: 0,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 2.w),
               child: Container(
