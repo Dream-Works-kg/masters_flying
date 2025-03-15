@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:masters_flying/src/core/core.dart';
+import 'package:masters_flying/src/models/flight_ticket_model.dart';
 import 'package:masters_flying/src/presentations/game/core/flappy_bird_game.dart';
 import 'package:masters_flying/src/presentations/presentations.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class HomeView extends StatelessWidget {
@@ -14,6 +16,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     game.pauseEngine();
+    final provider = Provider.of<FlightTicketProvider>(context);
 
     return CustomScaffold(
       body: Stack(
@@ -78,14 +81,19 @@ class HomeView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Text(
-                    '4',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 50.sp,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  Consumer<FlightTicketProvider>(
+                    builder: (context, provider, child) {
+                      return Text(
+                        provider.totalFlights
+                            .toString(), // Отображаем сумму перелетов
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 50.sp,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      );
+                    },
                   ),
                   Text(
                     'Total flights',
@@ -116,6 +124,7 @@ class HomeView extends StatelessWidget {
                     () {
                       game.overlays.remove('mainMenu');
                       game.resumeEngine();
+                      provider.addFlight();
                     },
                   ),
                 ],

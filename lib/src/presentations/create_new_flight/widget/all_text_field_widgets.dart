@@ -136,7 +136,6 @@ class _AllTextFieldWidgetsState extends State<AllTextFieldWidgets> {
               ],
             ),
           ),
-         
         ],
       ),
     );
