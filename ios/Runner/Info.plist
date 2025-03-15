@@ -45,5 +45,18 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<!-- Разрешение на доступ к галерее -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your gallery to select an image.</string>
+
+	<!-- Разрешение на сохранение в галерею -->
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need permission to save images to your gallery.</string>
+
+	<!-- Разрешение на использование камеры -->
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to your camera to take photos.</string>
+
 </dict>
 </plist>
